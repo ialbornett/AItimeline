@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-from streamlit_plotly_events import plotly_events
 
 # Data: List of AI Milestones with Descriptions
 data = [
@@ -199,7 +198,6 @@ data = [
     },
 ]
 
-
 # Create a DataFrame
 df = pd.DataFrame(data)
 
@@ -228,25 +226,52 @@ year_range = st.sidebar.slider(
 
 filtered_df = df[(df["Year"] >= year_range[0]) & (df["Year"] <= year_range[1])].reset_index(drop=True)
 
+# Milestone selection
+st.sidebar.header("Select a Milestone")
+selected_milestone = st.sidebar.selectbox("Choose a Milestone", ["None"] + filtered_df["Milestone"].tolist())
+
 # Create cumulative milestones line chart
 fig = go.Figure()
 
-fig.add_trace(
-    go.Scatter(
-        x=filtered_df["Year"],
-        y=filtered_df["Cumulative"],
-        mode="lines+markers",
-        marker=dict(size=8, color="DarkBlue"),
-        line=dict(color="DarkBlue"),
-        hovertext=filtered_df.apply(
-            lambda row: f"<b>Year:</b> {row['Year']}<br>"
-                        f"<b>Cumulative Milestones:</b> {row['Cumulative']}<br>"
-                        f"<b>Milestone:</b> {row['Milestone']}",
-            axis=1
-        ),
-        hoverinfo="text",
+# Highlight the selected milestone
+if selected_milestone != "None":
+    selected_year = filtered_df[filtered_df["Milestone"] == selected_milestone]["Year"].values[0]
+    fig.add_trace(
+        go.Scatter(
+            x=filtered_df["Year"],
+            y=filtered_df["Cumulative"],
+            mode="lines+markers",
+            marker=dict(
+                size=8,
+                color=["red" if year == selected_year else "DarkBlue" for year in filtered_df["Year"]],
+            ),
+            line=dict(color="DarkBlue"),
+            hovertext=filtered_df.apply(
+                lambda row: f"<b>Year:</b> {row['Year']}<br>"
+                            f"<b>Cumulative Milestones:</b> {row['Cumulative']}<br>"
+                            f"<b>Milestone:</b> {row['Milestone']}",
+                axis=1
+            ),
+            hoverinfo="text",
+        )
     )
-)
+else:
+    fig.add_trace(
+        go.Scatter(
+            x=filtered_df["Year"],
+            y=filtered_df["Cumulative"],
+            mode="lines+markers",
+            marker=dict(size=8, color="DarkBlue"),
+            line=dict(color="DarkBlue"),
+            hovertext=filtered_df.apply(
+                lambda row: f"<b>Year:</b> {row['Year']}<br>"
+                            f"<b>Cumulative Milestones:</b> {row['Cumulative']}<br>"
+                            f"<b>Milestone:</b> {row['Milestone']}",
+                axis=1
+            ),
+            hoverinfo="text",
+        )
+    )
 
 # Update layout
 fig.update_layout(
@@ -259,27 +284,19 @@ fig.update_layout(
     hovermode="closest",
 )
 
-# Display the cumulative milestones line chart and capture click events
-selected_points = plotly_events(
-    fig,
-    click_event=True,
-    hover_event=False,
-    select_event=False,
-    override_height=500,
-    override_width="100%",
-)
+# Display the cumulative milestones line chart
+st.plotly_chart(fig, use_container_width=True)
 
 # Show detailed information when a milestone is selected
 st.header("Milestone Details")
 
-if selected_points:
-    # Get the index of the selected point
-    point_index = selected_points[0]["pointIndex"]
-    milestone_details = filtered_df.iloc[point_index]
-    
+if selected_milestone != "None":
+    milestone_details = filtered_df[filtered_df["Milestone"] == selected_milestone].iloc[0]
     st.markdown(f"**Year:** {milestone_details['Year']}")
     st.markdown(f"**Milestone:** {milestone_details['Milestone']}")
     st.markdown(f"**Main Person(s):** {milestone_details['Main_Persons']}")
     st.markdown(f"**Description:** {milestone_details['Description']}")
 else:
-    st.write("Click on a point in the chart to see the milestone details.")
+    st.write("Select a milestone from the sidebar to see the details.")
+
+
