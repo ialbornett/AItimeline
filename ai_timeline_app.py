@@ -196,6 +196,55 @@ data = [
         "Main_Persons": "OpenAI Team",
         "Description": "OpenAI releases GPT-4, an advanced language model with enhanced capabilities in understanding and generating text."
     },
+        {
+        "Year": 2023,
+        "Milestone": "Google Gemini Release",
+        "Main_Persons": "Google AI Team",
+        "Description": "Google releases Gemini, a multimodal model suite with advanced conversational capabilities, integrated into Google Cloud for enterprise AI solutions."
+    },
+    {
+        "Year": 2023,
+        "Milestone": "Meta LLaMA 2 Launch",
+        "Main_Persons": "Meta AI Team",
+        "Description": "Meta releases LLaMA 2, an open-source large language model with 70 billion parameters, designed for research and commercial applications."
+    },
+    {
+        "Year": 2023,
+        "Milestone": "Cohere Command R",
+        "Main_Persons": "Cohere AI Team",
+        "Description": "Cohere launches Command R, a model optimized for retrieval-augmented generation, tailored for enterprises dealing with large datasets."
+    },
+    {
+        "Year": 2023,
+        "Milestone": "Snowflake Arctic and Partnership with Mistral AI",
+        "Main_Persons": "Snowflake AI Team",
+        "Description": "Snowflake introduces Arctic, an open-source language model, in partnership with Mistral AI to enhance retrieval-augmented generation for enterprise use."
+    },
+    {
+        "Year": 2023,
+        "Milestone": "Databricks Mosaic and Integration of Mistral Models",
+        "Main_Persons": "Databricks AI Team",
+        "Description": "Databricks releases Mosaic, a platform for deploying and fine-tuning foundation models, integrating Mistral’s AI models for enterprise data processing."
+    },
+    {
+        "Year": 2023,
+        "Milestone": "NVIDIA NeMo Framework Expansion",
+        "Main_Persons": "NVIDIA AI Team",
+        "Description": "NVIDIA expands its NeMo framework to support multimodal AI models and high-performance computing, catering to industries needing fast AI model development."
+    },
+    {
+        "Year": 2024,
+        "Milestone": "Meta LLaMA 3 Release",
+        "Main_Persons": "Meta AI Team",
+        "Description": "Meta releases LLaMA 3, an open-source model with up to 70 billion parameters, showcasing enhanced reasoning and multilingual capabilities."
+    },
+    {
+        "Year": 2024,
+        "Milestone": "OpenAI O1 Release",
+        "Main_Persons": "OpenAI Rasberry",
+        "Description": "The o1 model series is trained with large-scale reinforcement learning to reason using chain of thought."
+    }
+
 ]
 
 # Create a DataFrame
