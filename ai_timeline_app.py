@@ -248,7 +248,6 @@ if selected_milestone != "None":
             line=dict(color="DarkBlue"),
             hovertext=filtered_df.apply(
                 lambda row: f"<b>Year:</b> {row['Year']}<br>"
-                            f"<b>Cumulative Milestones:</b> {row['Cumulative']}<br>"
                             f"<b>Milestone:</b> {row['Milestone']}",
                 axis=1
             ),
