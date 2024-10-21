@@ -412,7 +412,7 @@ fig.add_trace(
 
 # Apply dark mode settings
 fig.update_layout(
-    paper_bgcolor="grey",  # Background of the entire chart
+    paper_bgcolor="black",  # Background of the entire chart
     plot_bgcolor="black",  # Background of the plot area
     font_color="white",  # Font color for labels
     height=500,
