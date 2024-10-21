@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
+# Streamlit App Configuration: Call this as the first command
+st.set_page_config(page_title="AI Milestones Timeline", layout="wide")
+
 # Custom CSS for dark mode in Streamlit
 st.markdown(
     """
@@ -356,9 +359,6 @@ df = df.sort_values(by="Date").reset_index(drop=True)
 
 # Calculate cumulative milestones
 df["Cumulative"] = range(1, len(df) + 1)
-
-# Streamlit App
-st.set_page_config(page_title="AI Milestones Timeline", layout="wide")
 
 st.title("Significant AI Milestones Timeline")
 
