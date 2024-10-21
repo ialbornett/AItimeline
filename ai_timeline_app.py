@@ -337,12 +337,6 @@ year_range = st.sidebar.slider(
 )
 filtered_df = df[(df["Year"] >= year_range[0]) & (df["Year"] <= year_range[1])].reset_index(drop=True)
 
-# Milestone selection from the sidebar
-st.sidebar.header("Select a Milestone")
-selected_milestone_sidebar = st.sidebar.selectbox(
-    "Choose a Milestone", ["None"] + filtered_df["Milestone"].tolist()
-)
-
 # Interactive selection of milestones using a selectbox
 st.header("Select a Milestone from the Dropdown")
 
@@ -357,12 +351,7 @@ selected_option = st.selectbox("Milestones", milestone_options)
 
 # Determine the selected milestone and date
 if selected_option != "None":
-    # Extract the milestone title from the selected option
     selected_milestone = selected_option.split(" - ", 1)[1]
-    selected_date = filtered_df[filtered_df["Milestone"] == selected_milestone]["Date"].values[0]
-elif selected_milestone_sidebar != "None":
-    # Use the milestone selected from the sidebar
-    selected_milestone = selected_milestone_sidebar
     selected_date = filtered_df[filtered_df["Milestone"] == selected_milestone]["Date"].values[0]
 else:
     selected_milestone = "None"
@@ -370,11 +359,11 @@ else:
 
 # Generate marker colors based on selection
 marker_colors = [
-    "red" if (selected_date is not None and date == selected_date) else "DarkBlue"
+    "red" if (selected_date is not None and date == selected_date) else "lightblue"
     for date in filtered_df["Date"]
 ]
 
-# Create cumulative milestones line chart
+# Create cumulative milestones line chart with a dark mode theme
 fig = go.Figure()
 
 fig.add_trace(
@@ -383,7 +372,7 @@ fig.add_trace(
         y=filtered_df["Cumulative"],
         mode="lines+markers",
         marker=dict(size=8, color=marker_colors),
-        line=dict(color="DarkBlue"),
+        line=dict(color="cyan"),
         hovertext=filtered_df.apply(
             lambda row: f"<b>Date:</b> {row['Date'].strftime('%d %B, %Y')}<br>"
                         f"<b>Milestone:</b> {row['Milestone']}",
@@ -393,11 +382,15 @@ fig.add_trace(
     )
 )
 
-# Update layout
+# Apply dark mode settings
 fig.update_layout(
+    paper_bgcolor="black",  # Background of the entire chart
+    plot_bgcolor="black",  # Background of the plot area
+    font_color="white",  # Font color for labels
     height=500,
     showlegend=False,
     xaxis_title="Date",
+    yaxis_title="Cumulative Milestones",
     xaxis=dict(
         range=[
             pd.Timestamp(year=year_range[0], month=1, day=1) - pd.DateOffset(months=6),
@@ -406,9 +399,12 @@ fig.update_layout(
         tickformat="%B %Y",
         tickmode="auto",
         nticks=20,
+        color="white"  # White tick labels
     ),
-    yaxis_title="Cumulative Milestones",
-    yaxis=dict(range=[0, filtered_df["Cumulative"].max() + 1]),
+    yaxis=dict(
+        range=[0, filtered_df["Cumulative"].max() + 1],
+        color="white"  # White tick labels
+    ),
     hovermode="closest",
 )
 
@@ -419,12 +415,10 @@ st.plotly_chart(fig, use_container_width=True)
 st.header("Milestone Details")
 
 if selected_milestone != "None":
-    milestone_details = filtered_df[
-        filtered_df["Milestone"] == selected_milestone
-    ].iloc[0]
+    milestone_details = filtered_df[filtered_df["Milestone"] == selected_milestone].iloc[0]
     st.markdown(f"**Date:** {milestone_details['Date'].strftime('%d %B, %Y')}")
     st.markdown(f"**Milestone:** {milestone_details['Milestone']}")
     st.markdown(f"**Main Person(s):** {milestone_details['Main_Persons']}")
     st.markdown(f"**Description:** {milestone_details['Description']}")
 else:
-    st.write("Select a milestone from the sidebar or the dropdown to see the details.")
+    st.write("Select a milestone from the dropdown to see the details.")
