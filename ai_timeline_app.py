@@ -22,7 +22,7 @@ st.markdown(
         color: white;
     }
     .stSidebar {
-        background-color: #333333;
+        background-color: #A0A0A0;
         color: white;
     }
     .css-2trqyj {  /* Input text, dropdowns, and sliders */
