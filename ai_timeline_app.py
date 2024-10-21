@@ -339,14 +339,33 @@ filtered_df = df[(df["Year"] >= year_range[0]) & (df["Year"] <= year_range[1])].
 
 # Milestone selection from the sidebar
 st.sidebar.header("Select a Milestone")
-selected_milestone = st.sidebar.selectbox(
+selected_milestone_sidebar = st.sidebar.selectbox(
     "Choose a Milestone", ["None"] + filtered_df["Milestone"].tolist()
 )
 
-# Highlight the selected milestone
-if selected_milestone != "None":
+# Interactive selection of milestones using a selectbox
+st.header("Select a Milestone from the Dropdown")
+
+# Create a list of milestones with dates for the selectbox
+milestone_options = ["None"] + [
+    f"{row['Date'].strftime('%d %B, %Y')} - {row['Milestone']}"
+    for index, row in filtered_df.iterrows()
+]
+
+# Get the selected option
+selected_option = st.selectbox("Milestones", milestone_options)
+
+# Determine the selected milestone and date
+if selected_option != "None":
+    # Extract the milestone title from the selected option
+    selected_milestone = selected_option.split(" - ", 1)[1]
+    selected_date = filtered_df[filtered_df["Milestone"] == selected_milestone]["Date"].values[0]
+elif selected_milestone_sidebar != "None":
+    # Use the milestone selected from the sidebar
+    selected_milestone = selected_milestone_sidebar
     selected_date = filtered_df[filtered_df["Milestone"] == selected_milestone]["Date"].values[0]
 else:
+    selected_milestone = "None"
     selected_date = None
 
 # Generate marker colors based on selection
@@ -394,37 +413,6 @@ fig.update_layout(
 )
 
 # Display the cumulative milestones line chart
-st.plotly_chart(fig, use_container_width=True)
-
-# Interactive selection of milestones using a selectbox
-st.header("Select a Milestone from the Dropdown")
-
-# Create a list of milestones with dates for the selectbox
-milestone_options = ["None"] + [
-    f"{row['Date'].strftime('%d %B, %Y')} - {row['Milestone']}"
-    for index, row in filtered_df.iterrows()
-]
-
-# Get the selected option
-selected_option = st.selectbox("Milestones", milestone_options)
-
-# Update the selected milestone and date based on the selection
-if selected_option != "None":
-    # Extract the milestone title from the selected option
-    selected_milestone = selected_option.split(" - ", 1)[1]
-    selected_date = filtered_df[filtered_df["Milestone"] == selected_milestone]["Date"].values[0]
-else:
-    selected_milestone = "None"
-    selected_date = None
-
-# Update marker colors based on the new selection
-marker_colors = [
-    "red" if (selected_date is not None and date == selected_date) else "DarkBlue"
-    for date in filtered_df["Date"]
-]
-
-# Re-render the chart with updated colors
-fig.update_traces(marker=dict(color=marker_colors))
 st.plotly_chart(fig, use_container_width=True)
 
 # Show detailed information when a milestone is selected
