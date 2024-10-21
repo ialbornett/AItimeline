@@ -10,19 +10,19 @@ st.markdown(
     """
     <style>
     body {
-        background-color: #222222;  /* Dark grey background */
+        background-color: #333333;  /* Dark grey background */
         color: white;  /* White font color */
     }
     .css-18e3th9 {  /* Main frame */
-        background-color: #222222;
+        background-color: #333333;
         color: white;
     }
     .css-1aumxhk {  /* Sidebar */
-        background-color: #222222;
+        background-color: #333333;
         color: white;
     }
     .stSidebar {
-        background-color: #222222;
+        background-color: #333333;
         color: white;
     }
     .css-2trqyj {  /* Input text, dropdowns, and sliders */
@@ -32,7 +32,7 @@ st.markdown(
         color: white !important;
     }
     .css-1v3fvcr {  /* Main container */
-        background-color: #222222;
+        background-color: #333333;
         color: grey;
     }
     .css-145kmo2 {  /* Title and header font color */
