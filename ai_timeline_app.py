@@ -324,7 +324,7 @@ st.set_page_config(page_title="AI Milestones Timeline", layout="wide")
 
 st.title("Significant AI Milestones Timeline")
 
-# Filter milestones based on year range
+# Filter milestones based on date range
 st.sidebar.header("Filter Milestones")
 start_date = df["Date"].min()
 end_date = df["Date"].max()
@@ -332,7 +332,8 @@ date_range = st.sidebar.slider(
     "Select Date Range",
     min_value=start_date,
     max_value=end_date,
-    value=(start_date, end_date)
+    value=(start_date, end_date),
+    format="YYYY-MM-DD"
 )
 filtered_df = df[(df["Date"] >= date_range[0]) & (df["Date"] <= date_range[1])].reset_index(drop=True)
 
@@ -345,19 +346,19 @@ fig = go.Figure()
 
 # Highlight the selected milestone
 if selected_milestone != "None":
-    selected_year = filtered_df[filtered_df["Milestone"] == selected_milestone]["Year"].values[0]
+    selected_date = filtered_df[filtered_df["Milestone"] == selected_milestone]["Date"].values[0]
     fig.add_trace(
         go.Scatter(
-            x=filtered_df["Year"],
+            x=filtered_df["Date"],
             y=filtered_df["Cumulative"],
             mode="lines+markers",
             marker=dict(
                 size=8,
-                color=["red" if year == selected_year else "DarkBlue" for year in filtered_df["Year"]],
+                color=["red" if date == selected_date else "DarkBlue" for date in filtered_df["Date"]],
             ),
             line=dict(color="DarkBlue"),
             hovertext=filtered_df.apply(
-                lambda row: f"<b>Year:</b> {row['Year']}<br>"
+                lambda row: f"<b>Date:</b> {row['Date'].strftime('%Y-%m-%d')}<br>"
                             f"<b>Milestone:</b> {row['Milestone']}",
                 axis=1
             ),
@@ -365,15 +366,15 @@ if selected_milestone != "None":
         )
     )
 else:
-fig.add_trace(
-    go.Scatter(
-        x=filtered_df["Date"],
-        y=filtered_df["Cumulative"],
+    fig.add_trace(
+        go.Scatter(
+            x=filtered_df["Date"],
+            y=filtered_df["Cumulative"],
             mode="lines+markers",
             marker=dict(size=8, color="DarkBlue"),
             line=dict(color="DarkBlue"),
             hovertext=filtered_df.apply(
-                lambda row: f"<b>Year:</b> {row['Year']}<br>"
+                lambda row: f"<b>Date:</b> {row['Date'].strftime('%Y-%m-%d')}<br>"
                             f"<b>Cumulative Milestones:</b> {row['Cumulative']}<br>"
                             f"<b>Milestone:</b> {row['Milestone']}",
                 axis=1
@@ -387,7 +388,8 @@ fig.update_layout(
     height=500,
     showlegend=False,
     xaxis_title="Date",
-    xaxis=dict(range=[year_range[0] - pd.DateOffset(years=1), year_range[1] + pd.DateOffset(years=1)],
+    xaxis=dict(
+        range=[date_range[0], date_range[1]],
         tickformat="%Y-%m-%d"
     ),
     yaxis_title="Cumulative Milestones",
@@ -403,11 +405,9 @@ st.header("Milestone Details")
 
 if selected_milestone != "None":
     milestone_details = filtered_df[filtered_df["Milestone"] == selected_milestone].iloc[0]
-    st.markdown(f"**Year:** {milestone_details['Year']}")
+    st.markdown(f"**Date:** {milestone_details['Date'].strftime('%Y-%m-%d')}")
     st.markdown(f"**Milestone:** {milestone_details['Milestone']}")
     st.markdown(f"**Main Person(s):** {milestone_details['Main_Persons']}")
     st.markdown(f"**Description:** {milestone_details['Description']}")
 else:
     st.write("Select a milestone from the sidebar to see the details.")
-
-
