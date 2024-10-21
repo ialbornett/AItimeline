@@ -324,18 +324,18 @@ st.set_page_config(page_title="AI Milestones Timeline", layout="wide")
 
 st.title("Significant AI Milestones Timeline")
 
-# Filter milestones based on date range
+# Filter milestones based on year range
 st.sidebar.header("Filter Milestones")
-start_date = df["Date"].min()
-end_date = df["Date"].max()
-date_range = st.sidebar.slider(
-    "Select Date Range",
-    min_value=start_date.to_pydatetime(),
-    max_value=end_date.to_pydatetime(),
-    value=(start_date.to_pydatetime(), end_date.to_pydatetime()),
-    format="YYYY-MM-DD"
+min_year = int(df["Year"].min())
+max_year = int(df["Year"].max())
+year_range = st.sidebar.slider(
+    "Select Year Range",
+    min_value=min_year,
+    max_value=max_year,
+    value=(min_year, max_year),
+    step=1
 )
-filtered_df = df[(df["Date"] >= date_range[0]) & (df["Date"] <= date_range[1])].reset_index(drop=True)
+filtered_df = df[(df["Year"] >= year_range[0]) & (df["Year"] <= year_range[1])].reset_index(drop=True)
 
 # Milestone selection
 st.sidebar.header("Select a Milestone")
@@ -358,7 +358,7 @@ if selected_milestone != "None":
             ),
             line=dict(color="DarkBlue"),
             hovertext=filtered_df.apply(
-                lambda row: f"<b>Date:</b> {row['Date'].strftime('%Y-%m-%d')}<br>"
+                lambda row: f"<b>Date:</b> {row['Date'].strftime('%d %B, %Y')}<br>"
                             f"<b>Milestone:</b> {row['Milestone']}",
                 axis=1
             ),
@@ -374,7 +374,7 @@ else:
             marker=dict(size=8, color="DarkBlue"),
             line=dict(color="DarkBlue"),
             hovertext=filtered_df.apply(
-                lambda row: f"<b>Date:</b> {row['Date'].strftime('%Y-%m-%d')}<br>"
+                lambda row: f"<b>Date:</b> {row['Date'].strftime('%d %B, %Y')}<br>"
                             f"<b>Cumulative Milestones:</b> {row['Cumulative']}<br>"
                             f"<b>Milestone:</b> {row['Milestone']}",
                 axis=1
@@ -389,8 +389,11 @@ fig.update_layout(
     showlegend=False,
     xaxis_title="Date",
     xaxis=dict(
-        range=[date_range[0], date_range[1]],
-        tickformat="%Y-%m-%d"
+        range=[
+            pd.Timestamp(year=year_range[0], month=1, day=1) - pd.DateOffset(months=6),
+            pd.Timestamp(year=year_range[1], month=12, day=31) + pd.DateOffset(months=6)
+        ],
+        tickformat="%d %B, %Y"
     ),
     yaxis_title="Cumulative Milestones",
     yaxis=dict(range=[0, filtered_df["Cumulative"].max() + 1]),
@@ -405,7 +408,7 @@ st.header("Milestone Details")
 
 if selected_milestone != "None":
     milestone_details = filtered_df[filtered_df["Milestone"] == selected_milestone].iloc[0]
-    st.markdown(f"**Date:** {milestone_details['Date'].strftime('%Y-%m-%d')}")
+    st.markdown(f"**Date:** {milestone_details['Date'].strftime('%d %B, %Y')}")
     st.markdown(f"**Milestone:** {milestone_details['Milestone']}")
     st.markdown(f"**Main Person(s):** {milestone_details['Main_Persons']}")
     st.markdown(f"**Description:** {milestone_details['Description']}")
