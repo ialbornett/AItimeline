@@ -387,7 +387,7 @@ selected_milestone_sidebar = st.sidebar.selectbox(
 
 # Generate marker colors based on selection
 marker_colors = [
-    "red" if milestone == selected_milestone_sidebar else "lightblue"
+    "red" if milestone == selected_milestone_sidebar else "grey"
     for milestone in filtered_df["Milestone"]
 ]
 
@@ -400,7 +400,7 @@ fig.add_trace(
         y=filtered_df["Cumulative"],
         mode="lines+markers",
         marker=dict(size=8, color=marker_colors),
-        line=dict(color="red"),
+        line=dict(color="green"),
         hovertext=filtered_df.apply(
             lambda row: f"<b>Date:</b> {row['Date'].strftime('%d %B, %Y')}<br>"
                         f"<b>Milestone:</b> {row['Milestone']}",
