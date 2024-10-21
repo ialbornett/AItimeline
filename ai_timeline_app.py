@@ -2,6 +2,44 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
+# Custom CSS for dark mode in Streamlit
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #0e1117;
+        color: white;
+    }
+    .css-18e3th9 {
+        background-color: #0e1117;
+        color: white;
+    }
+    .css-1aumxhk {
+        background-color: #0e1117;
+        color: white;
+    }
+    .stSidebar {
+        background-color: #0e1117;
+        color: white;
+    }
+    .css-2trqyj {
+        color: white;
+    }
+    .css-10trblm {
+        color: white;
+    }
+    .css-1v3fvcr {
+        background-color: #0e1117;
+        color: white;
+    }
+    .css-145kmo2 {
+        color: white;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # Data: List of AI Milestones with Descriptions
 data = [
     {
@@ -337,30 +375,16 @@ year_range = st.sidebar.slider(
 )
 filtered_df = df[(df["Year"] >= year_range[0]) & (df["Year"] <= year_range[1])].reset_index(drop=True)
 
-# Interactive selection of milestones using a selectbox
-st.header("Select a Milestone from the Dropdown")
-
-# Create a list of milestones with dates for the selectbox
-milestone_options = ["None"] + [
-    f"{row['Date'].strftime('%d %B, %Y')} - {row['Milestone']}"
-    for index, row in filtered_df.iterrows()
-]
-
-# Get the selected option
-selected_option = st.selectbox("Milestones", milestone_options)
-
-# Determine the selected milestone and date
-if selected_option != "None":
-    selected_milestone = selected_option.split(" - ", 1)[1]
-    selected_date = filtered_df[filtered_df["Milestone"] == selected_milestone]["Date"].values[0]
-else:
-    selected_milestone = "None"
-    selected_date = None
+# Milestone selection from the sidebar
+st.sidebar.header("Select a Milestone")
+selected_milestone_sidebar = st.sidebar.selectbox(
+    "Choose a Milestone", ["None"] + filtered_df["Milestone"].tolist()
+)
 
 # Generate marker colors based on selection
 marker_colors = [
-    "red" if (selected_date is not None and date == selected_date) else "lightblue"
-    for date in filtered_df["Date"]
+    "red" if milestone == selected_milestone_sidebar else "lightblue"
+    for milestone in filtered_df["Milestone"]
 ]
 
 # Create cumulative milestones line chart with a dark mode theme
@@ -414,11 +438,11 @@ st.plotly_chart(fig, use_container_width=True)
 # Show detailed information when a milestone is selected
 st.header("Milestone Details")
 
-if selected_milestone != "None":
-    milestone_details = filtered_df[filtered_df["Milestone"] == selected_milestone].iloc[0]
+if selected_milestone_sidebar != "None":
+    milestone_details = filtered_df[filtered_df["Milestone"] == selected_milestone_sidebar].iloc[0]
     st.markdown(f"**Date:** {milestone_details['Date'].strftime('%d %B, %Y')}")
     st.markdown(f"**Milestone:** {milestone_details['Milestone']}")
     st.markdown(f"**Main Person(s):** {milestone_details['Main_Persons']}")
     st.markdown(f"**Description:** {milestone_details['Description']}")
 else:
-    st.write("Select a milestone from the dropdown to see the details.")
+    st.write("Select a milestone from the sidebar to see the details.")
