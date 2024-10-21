@@ -5,37 +5,37 @@ import plotly.graph_objects as go
 # Streamlit App Configuration: Call this as the first command
 st.set_page_config(page_title="AI Milestones Timeline", layout="wide")
 
-# Custom CSS for dark mode in Streamlit
+# Custom CSS for dark gray background and white fonts in Streamlit
 st.markdown(
     """
     <style>
     body {
-        background-color: #0e1117;
+        background-color: #2E2E2E;  /* Dark grey background */
+        color: white;  /* White font color */
+    }
+    .css-18e3th9 {  /* Main frame */
+        background-color: #2E2E2E;
         color: white;
     }
-    .css-18e3th9 {
-        background-color: #0e1117;
-        color: white;
-    }
-    .css-1aumxhk {
-        background-color: #0e1117;
+    .css-1aumxhk {  /* Sidebar */
+        background-color: #2E2E2E;
         color: white;
     }
     .stSidebar {
-        background-color: #0e1117;
+        background-color: #2E2E2E;
         color: white;
     }
-    .css-2trqyj {
+    .css-2trqyj {  /* Input text, dropdowns, and sliders */
         color: white;
     }
     .css-10trblm {
         color: white;
     }
-    .css-1v3fvcr {
-        background-color: #0e1117;
+    .css-1v3fvcr {  /* Main container */
+        background-color: #2E2E2E;
         color: white;
     }
-    .css-145kmo2 {
+    .css-145kmo2 {  /* Title and header font color */
         color: white;
     }
     </style>
