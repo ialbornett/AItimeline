@@ -214,7 +214,7 @@ data = [
         "Main_Persons": "OpenAI Team",
         "Description": "OpenAI releases DALL·E 2, a model capable of generating images from textual descriptions, advancing generative AI."
     },
-       {
+    {
         "Date": "2022-06-12",
         "Year": 2022,
         "Milestone": "Launch of Midjourney",
@@ -325,9 +325,19 @@ st.set_page_config(page_title="AI Milestones Timeline", layout="wide")
 st.title("Significant AI Milestones Timeline")
 
 # Filter milestones based on year range
-# ... [Code from earlier sections] ...
+st.sidebar.header("Filter Milestones")
+min_year = int(df["Year"].min())
+max_year = int(df["Year"].max())
+year_range = st.sidebar.slider(
+    "Select Year Range",
+    min_value=min_year,
+    max_value=max_year,
+    value=(min_year, max_year),
+    step=1
+)
+filtered_df = df[(df["Year"] >= year_range[0]) & (df["Year"] <= year_range[1])].reset_index(drop=True)
 
-# Milestone selection
+# Milestone selection from the sidebar
 st.sidebar.header("Select a Milestone")
 selected_milestone = st.sidebar.selectbox(
     "Choose a Milestone", ["None"] + filtered_df["Milestone"].tolist()
@@ -386,25 +396,26 @@ fig.update_layout(
 # Display the cumulative milestones line chart
 st.plotly_chart(fig, use_container_width=True)
 
-# Interactive table for selecting a milestone
-st.header("Select a Milestone from the Table")
+# Interactive selection of milestones using a selectbox
+st.header("Select a Milestone from the Dropdown")
 
-# Create a DataFrame for the table with an index
-table_df = filtered_df[['Date', 'Milestone']].copy()
-table_df['Index'] = range(len(table_df))
-table_df['Date'] = table_df['Date'].dt.strftime('%d %B, %Y')
+# Create a list of milestones with dates for the selectbox
+milestone_options = ["None"] + [
+    f"{row['Date'].strftime('%d %B, %Y')} - {row['Milestone']}"
+    for index, row in filtered_df.iterrows()
+]
 
-# Use selectbox to select a milestone
-selected_index = st.selectbox(
-    'Select a Milestone',
-    options=table_df['Index'],
-    format_func=lambda x: f"{table_df.loc[x, 'Date']} - {table_df.loc[x, 'Milestone']}"
-)
+# Get the selected option
+selected_option = st.selectbox("Milestones", milestone_options)
 
-# Update the selected milestone
-if selected_index is not None:
-    selected_milestone = table_df.loc[selected_index, 'Milestone']
-    selected_date = pd.to_datetime(table_df.loc[selected_index, 'Date'], format='%d %B, %Y')
+# Update the selected milestone and date based on the selection
+if selected_option != "None":
+    # Extract the milestone title from the selected option
+    selected_milestone = selected_option.split(" - ", 1)[1]
+    selected_date = filtered_df[filtered_df["Milestone"] == selected_milestone]["Date"].values[0]
+else:
+    selected_milestone = "None"
+    selected_date = None
 
 # Update marker colors based on the new selection
 marker_colors = [
@@ -428,4 +439,4 @@ if selected_milestone != "None":
     st.markdown(f"**Main Person(s):** {milestone_details['Main_Persons']}")
     st.markdown(f"**Description:** {milestone_details['Description']}")
 else:
-    st.write("Select a milestone from the sidebar or the table to see the details.")
+    st.write("Select a milestone from the sidebar or the dropdown to see the details.")
