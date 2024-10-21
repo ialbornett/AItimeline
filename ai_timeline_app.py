@@ -393,7 +393,9 @@ fig.update_layout(
             pd.Timestamp(year=year_range[0], month=1, day=1) - pd.DateOffset(months=6),
             pd.Timestamp(year=year_range[1], month=12, day=31) + pd.DateOffset(months=6)
         ],
-        tickformat="%d %B, %Y"
+        tickformat="%B %Y",  # Display full month name and year
+        tickmode="auto",
+        nticks=20  # Adjust the number of ticks on the x-axis
     ),
     yaxis_title="Cumulative Milestones",
     yaxis=dict(range=[0, filtered_df["Cumulative"].max() + 1]),
