@@ -400,7 +400,7 @@ fig.add_trace(
         y=filtered_df["Cumulative"],
         mode="lines+markers",
         marker=dict(size=8, color=marker_colors),
-        line=dict(color="cyan"),
+        line=dict(color="red"),
         hovertext=filtered_df.apply(
             lambda row: f"<b>Date:</b> {row['Date'].strftime('%d %B, %Y')}<br>"
                         f"<b>Milestone:</b> {row['Milestone']}",
@@ -412,7 +412,7 @@ fig.add_trace(
 
 # Apply dark mode settings
 fig.update_layout(
-    paper_bgcolor="black",  # Background of the entire chart
+    paper_bgcolor="grey",  # Background of the entire chart
     plot_bgcolor="black",  # Background of the plot area
     font_color="white",  # Font color for labels
     height=500,
