@@ -330,9 +330,9 @@ start_date = df["Date"].min()
 end_date = df["Date"].max()
 date_range = st.sidebar.slider(
     "Select Date Range",
-    min_value=start_date,
-    max_value=end_date,
-    value=(start_date, end_date),
+    min_value=start_date.to_pydatetime(),
+    max_value=end_date.to_pydatetime(),
+    value=(start_date.to_pydatetime(), end_date.to_pydatetime()),
     format="YYYY-MM-DD"
 )
 filtered_df = df[(df["Date"] >= date_range[0]) & (df["Date"] <= date_range[1])].reset_index(drop=True)
