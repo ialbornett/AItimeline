@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 # Streamlit App Configuration: Call this as the first command
 st.set_page_config(page_title="AI Milestones Timeline", layout="wide")
 
-# Custom CSS for dark gray background and white fonts in Streamlit
+# Custom CSS for dark gray background and white fonts, including sliders and other components
 st.markdown(
     """
     <style>
@@ -26,10 +26,10 @@ st.markdown(
         color: white;
     }
     .css-2trqyj {  /* Input text, dropdowns, and sliders */
-        color: white;
+        color: white !important;
     }
-    .css-10trblm {
-        color: white;
+    .css-10trblm {  /* Slider values */
+        color: white !important;
     }
     .css-1v3fvcr {  /* Main container */
         background-color: #2E2E2E;
@@ -37,6 +37,9 @@ st.markdown(
     }
     .css-145kmo2 {  /* Title and header font color */
         color: white;
+    }
+    .css-1dp5vir {  /* Fix slider tick labels */
+        color: white !important;
     }
     </style>
     """,
