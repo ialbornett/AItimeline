@@ -349,6 +349,13 @@ data = [
         "Milestone": "OpenAI O1 Release",
         "Main_Persons": "OpenAI Team",
         "Description": "OpenAI releases the O1 model series, trained with large-scale reinforcement learning to reason using chain of thought."
+    },
+    {
+        "Date": "2024-11-12",
+        "Year": 2024,
+        "Milestone": "Created this timeline",
+        "Main_Persons": "Igor Albornett",
+        "Description": "Created a Streamlit App to look at these events in a more interactive and data centric manner"
     }
 ]
 
